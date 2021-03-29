@@ -1,0 +1,15 @@
+name: TokenAPI
+main: io.github.levtey.TokenAPI.TokenPlugin
+api-version: 1.16
+version: 0.0.1
+author: levtey
+depend: [RedLib]
+permissions:
+  tokens.balance:
+    default: true
+  tokens.balance.others:
+    default: true
+  tokens.manage:
+    default: op
+  tokens.reload:
+    default: op

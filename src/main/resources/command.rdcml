@@ -1,0 +1,25 @@
+tokens,token player:arg? {
+	permission tokens.balance
+	nohelp
+	hook check
+	give player:target int:amount {
+		permission tokens.manage
+		nohelp
+		hook give
+	}
+	take player:target int:amount {
+		permission tokens.manage
+		nohelp
+		hook take
+	}
+	set player:target int:amount {
+		permission tokens.manage
+		nohelp
+		hook set
+	}
+	reload {
+		permission tokens.reload
+		nohelp
+		hook reload
+	}
+}

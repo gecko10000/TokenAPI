@@ -1,0 +1,13 @@
+auto-save-ticks: 1200
+
+lang:
+  no:
+    player: "&cInvalid player!"
+  check:
+    self: "&3Tokens: &e%tokens%"
+    others: "&a%player%'s &3tokens: &e%tokens%"
+  manage:
+    give: "&a%player% &3has been given &e%given% &3tokens. Total: &e%tokens%"
+    take: "&a%player% &3has had &e%taken% &3tokens taken. Total: &e%tokens%"
+    set: "&a%player%'s &3token balance set to: &e%tokens%"
+  reload: "&aConfigs reloaded!"
