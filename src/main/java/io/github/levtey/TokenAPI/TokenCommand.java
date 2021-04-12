@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,6 +12,8 @@ import net.md_5.bungee.api.ChatColor;
 import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.CommandParser;
+import redempt.redlib.commandmanager.ContextProvider;
+import redempt.redlib.misc.UserCache;
 
 public class TokenCommand {
 
@@ -18,26 +21,22 @@ public class TokenCommand {
 	
 	protected TokenCommand(TokenPlugin plugin) {
 		this.plugin = plugin;
-		ArgType<Player> playerType = new ArgType<>("player", Bukkit::getPlayer);
+		UserCache.asyncInit();
+		ArgType<OfflinePlayer> playerType = new ArgType<>("offlineplayer", UserCache::getOfflinePlayer)
+				.tabStream(sender -> Bukkit.getOnlinePlayers().stream().map(Player::getName));
 		new CommandParser(plugin.getResource("command.rdcml")).setArgTypes(playerType).parse().register("", this);
 	}
 	
 	@CommandHook("check")
-	public void check(CommandSender sender, Player player) {
-		if (player == null && sender instanceof Player) {
-			sendMessage(sender, "lang.check.self",
-					"%tokens%", TokenAPI.get((Player) sender));
-		} else if (player != null) {
-			sendMessage(sender, "lang.check.others",
-					"%player%", player.getName(),
-					"%tokens%", TokenAPI.get(player));
-		} else {
-			sendMessage(sender, "lang.no.player");
-		}
+	public void check(CommandSender sender, OfflinePlayer player) {
+		sendMessage(sender, "lang.check",
+				"%player%", player.getName(),
+				"%tokens%", TokenAPI.get(player));
 	}
 	
 	@CommandHook("give")
-	public void give(CommandSender sender, Player player, int amount) {
+	public void give(CommandSender sender, OfflinePlayer player, int amount) {
+		if (player == null) return;
 		TokenAPI.give(player, amount);
 		sendMessage(sender, "lang.manage.give",
 				"%player%", player.getName(),
@@ -46,7 +45,8 @@ public class TokenCommand {
 	}
 	
 	@CommandHook("take")
-	public void take(CommandSender sender, Player player, int amount) {
+	public void take(CommandSender sender, OfflinePlayer player, int amount) {
+		if (player == null) return;
 		TokenAPI.take(player, amount);
 		sendMessage(sender, "lang.manage.take",
 				"%player%", player.getName(),
@@ -55,7 +55,8 @@ public class TokenCommand {
 	}
 	
 	@CommandHook("set")
-	public void set(CommandSender sender, Player player, int amount) {
+	public void set(CommandSender sender, OfflinePlayer player, int amount) {
+		if (player == null) return;
 		TokenAPI.set(player, amount);
 		sendMessage(sender, "lang.manage.set",
 				"%player%", player.getName(),

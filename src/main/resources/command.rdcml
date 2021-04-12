@@ -1,25 +1,25 @@
-tokens,token player:arg? {
+tokens,token offlineplayer:target?(context self) {
 	permission tokens.balance
-	nohelp
+	help Check a player's token balance
 	hook check
-	give player:target int:amount {
+	give offlineplayer:target int:amount {
 		permission tokens.manage
-		nohelp
+		help Give tokens to a player
 		hook give
 	}
-	take player:target int:amount {
+	take offlineplayer:target int:amount {
 		permission tokens.manage
-		nohelp
+		help Take tokens from a player
 		hook take
 	}
-	set player:target int:amount {
+	set offlineplayer:target int:amount {
 		permission tokens.manage
-		nohelp
+		help Set tokens for a player
 		hook set
 	}
 	reload {
 		permission tokens.reload
-		nohelp
+		help Reload the config
 		hook reload
 	}
 }
