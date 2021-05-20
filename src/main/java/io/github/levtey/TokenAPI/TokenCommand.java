@@ -78,6 +78,7 @@ public class TokenCommand {
 	@CommandHook("top")
 	public void top(CommandSender sender) {
 		if (lastUpdate + plugin.getConfig().getInt("top-cache-ms") < System.currentTimeMillis()) { //update time has passed, update
+			lastUpdate = System.currentTimeMillis();
 			topCache.clear();
 			Results results = TokenAPI.sql.queryResults("SELECT uuid,tokens FROM balances ORDER BY tokens DESC LIMIT 10;");
 			results.forEach(r -> {
@@ -85,13 +86,13 @@ public class TokenCommand {
 				int balance = r.get(2);
 				topCache.add(new Place(uuid, balance));
 			});
-			for (int i = 1; i <= 10; i++) { // send message, whether from newly updated or already cached
-				Place place = topCache.get(i);
-				sendMessage(sender, "lang.top",
-						"%place%", i,
-						"%player%", Bukkit.getOfflinePlayer(place.uuid).getName(),
-						"%tokens%", place.amount);
-			}
+		}
+		for (int i = 0; i < Math.min(topCache.size(), 10); i++) { // send message, whether from newly updated or already cached
+			Place place = topCache.get(i);
+			sendMessage(sender, "lang.top",
+					"%place%", i + 1,
+					"%player%", Bukkit.getOfflinePlayer(place.uuid).getName(),
+					"%tokens%", place.amount);
 		}
 
 	}
