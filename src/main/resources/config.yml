@@ -1,4 +1,5 @@
 auto-save-ticks: 1200
+top-cache-ms: 300000
 
 lang:
   no:
