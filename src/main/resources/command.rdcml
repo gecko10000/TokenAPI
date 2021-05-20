@@ -22,4 +22,9 @@ tokens,token offlineplayer:target?(context self) {
 		help Reload the config
 		hook reload
 	}
+	top {
+		permission tokens.top
+		help View the richest players
+		hook top
+	}
 }

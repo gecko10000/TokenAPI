@@ -2,6 +2,7 @@ package io.github.levtey.TokenAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -14,6 +15,7 @@ import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.ContextProvider;
 import redempt.redlib.misc.UserCache;
+import redempt.redlib.sql.SQLHelper.Results;
 
 public class TokenCommand {
 
@@ -68,6 +70,21 @@ public class TokenCommand {
 		plugin.saveDefaultConfig();
 		plugin.reloadConfig();
 		sendMessage(sender, "lang.reload");
+	}
+	
+	@CommandHook("top")
+	public void top(CommandSender sender) {
+		Results results = TokenAPI.sql.queryResults("SELECT uuid,tokens FROM balances ORDER BY tokens DESC LIMIT 10;");
+		int[] count = {1};
+		results.forEach(r -> {
+			UUID uuid = UUID.fromString(r.getString(1));
+			int balance = r.get(2);
+			sendMessage(sender, "lang.top",
+					"%place%", count[0],
+					"%player%", Bukkit.getOfflinePlayer(uuid).getName(),
+					"%tokens%", balance);
+			count[0]++;
+		});
 	}
 	
 	private void sendMessage(CommandSender sender, String configPath, Object...objects) {
