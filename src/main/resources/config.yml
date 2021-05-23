@@ -10,4 +10,6 @@ lang:
     take: "&a%player% &3has had &e%taken% &3tokens taken. Total: &e%tokens%"
     set: "&a%player%'s &3token balance set to: &e%tokens%"
   reload: "&aConfigs reloaded!"
-  top: "&3%place%. &a%player% &3- &e%tokens%"
+  top:
+    place: "&3%place%. &a%player% &3- &e%tokens%"
+    border: "&3------------------"

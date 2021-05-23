@@ -14,6 +14,7 @@ import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.commandmanager.ContextProvider;
+import redempt.redlib.misc.Task;
 import redempt.redlib.misc.UserCache;
 import redempt.redlib.sql.SQLHelper.Results;
 
@@ -39,30 +40,30 @@ public class TokenCommand {
 	@CommandHook("give")
 	public void give(CommandSender sender, OfflinePlayer player, int amount) {
 		if (player == null) return;
-		TokenAPI.give(player, amount);
 		sendMessage(sender, "lang.manage.give",
 				"%player%", player.getName(),
 				"%given%", amount,
-				"%tokens%", TokenAPI.get(player));
+				"%tokens%", TokenAPI.get(player) + amount);
+		TokenAPI.give(player, amount);
 	}
 	
 	@CommandHook("take")
 	public void take(CommandSender sender, OfflinePlayer player, int amount) {
 		if (player == null) return;
-		TokenAPI.take(player, amount);
 		sendMessage(sender, "lang.manage.take",
 				"%player%", player.getName(),
 				"%taken%", amount,
-				"%tokens%", TokenAPI.get(player));
+				"%tokens%", Math.max(0, TokenAPI.get(player) - amount));
+		TokenAPI.take(player, amount);
 	}
 	
 	@CommandHook("set")
 	public void set(CommandSender sender, OfflinePlayer player, int amount) {
 		if (player == null) return;
-		TokenAPI.set(player, amount);
 		sendMessage(sender, "lang.manage.set",
 				"%player%", player.getName(),
-				"%tokens%", TokenAPI.get(player));
+				"%tokens%", amount);
+		TokenAPI.set(player, amount);
 	}
 	
 	@CommandHook("reload")
@@ -87,14 +88,15 @@ public class TokenCommand {
 				topCache.add(new Place(uuid, balance));
 			});
 		}
-		for (int i = 0; i < Math.min(topCache.size(), 10); i++) { // send message, whether from newly updated or already cached
+		sendMessage(sender, "lang.top.border"); // send leaderboard, whether from newly updated or already cached
+		for (int i = 0; i < Math.min(topCache.size(), 10); i++) {
 			Place place = topCache.get(i);
-			sendMessage(sender, "lang.top",
+			sendMessage(sender, "lang.top.place",
 					"%place%", i + 1,
 					"%player%", Bukkit.getOfflinePlayer(place.uuid).getName(),
 					"%tokens%", place.amount);
 		}
-
+		sendMessage(sender, "lang.top.border");
 	}
 	
 	private void sendMessage(CommandSender sender, String configPath, Object...objects) {
