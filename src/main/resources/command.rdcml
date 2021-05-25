@@ -2,17 +2,17 @@ tokens,token offlineplayer:target?(context self) {
 	permission tokens.balance
 	help Check a player's token balance
 	hook check
-	give offlineplayer:target int:amount {
+	give offlineplayer:target long:amount {
 		permission tokens.manage
 		help Give tokens to a player
 		hook give
 	}
-	take offlineplayer:target int:amount {
+	take offlineplayer:target long:amount {
 		permission tokens.manage
 		help Take tokens from a player
 		hook take
 	}
-	set offlineplayer:target int:amount {
+	set offlineplayer:target long:amount {
 		permission tokens.manage
 		help Set tokens for a player
 		hook set
