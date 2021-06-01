@@ -38,7 +38,7 @@ public class TokenCommand {
 	}
 	
 	@CommandHook("give")
-	public void give(CommandSender sender, OfflinePlayer player, int amount) {
+	public void give(CommandSender sender, OfflinePlayer player, long amount) {
 		if (player == null) return;
 		sendMessage(sender, "lang.manage.give",
 				"%player%", player.getName(),
@@ -48,7 +48,7 @@ public class TokenCommand {
 	}
 	
 	@CommandHook("take")
-	public void take(CommandSender sender, OfflinePlayer player, int amount) {
+	public void take(CommandSender sender, OfflinePlayer player, long amount) {
 		if (player == null) return;
 		sendMessage(sender, "lang.manage.take",
 				"%player%", player.getName(),
@@ -58,7 +58,7 @@ public class TokenCommand {
 	}
 	
 	@CommandHook("set")
-	public void set(CommandSender sender, OfflinePlayer player, int amount) {
+	public void set(CommandSender sender, OfflinePlayer player, long amount) {
 		if (player == null) return;
 		sendMessage(sender, "lang.manage.set",
 				"%player%", player.getName(),
@@ -84,7 +84,7 @@ public class TokenCommand {
 			Results results = TokenAPI.sql.queryResults("SELECT uuid,tokens FROM balances ORDER BY tokens DESC LIMIT 10;");
 			results.forEach(r -> {
 				UUID uuid = UUID.fromString(r.getString(1));
-				int balance = r.get(2);
+				long balance = r.getLong(2);
 				topCache.add(new Place(uuid, balance));
 			});
 		}
